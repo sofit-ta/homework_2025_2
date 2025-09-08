@@ -27,17 +27,17 @@ const emailAnalyzer = (text) => {
     emails = emails.map(email => email.toLowerCase());
     const emailCount = emails.length;
 
-    const emailsEntryAmount = {};
+    const emailsEntryAmount = new Map();
     for (const email of emails) {
-        emailsEntryAmount[email] = (emailsEntryAmount[email] || 0) + 1;
+        emailsEntryAmount.set(email, 1 + (emailsEntryAmount.get(email) || 0));
     }
 
-    const uniqueEmails = Object.keys(emailsEntryAmount);
+    const uniqueEmails = Array.from(emailsEntryAmount.keys()).sort()
     let mostFrequentEmail;
     let maxCount = 0;
-    for (const email in emailsEntryAmount) {
-        if (emailsEntryAmount[email] > maxCount) {
-            maxCount = emailsEntryAmount[email];
+    for (const email of emailsEntryAmount.keys()) {
+        if (emailsEntryAmount.get(email) > maxCount) {
+            maxCount = emailsEntryAmount.get(email);
             mostFrequentEmail = email;
         }
     }

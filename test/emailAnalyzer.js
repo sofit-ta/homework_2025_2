@@ -39,11 +39,11 @@ QUnit.module("Тестируем функцию emailAnalyzer", function() {
         const input = "Корректные email: email@mail.ru, a@a.com. Некорректные email: @email, user@.com, email@.";
         const result = emailAnalyzer(input);
 
-        assert.deepEqual(result, {
-            emailCount: 2,
-            uniqueEmails: ["email@mail.ru", "a@a.com"],
-            mostFrequentEmail: "email@mail.ru" || "a@a.com"
-        });
+        assert.deepEqual(result.emailCount, 2);
+        assert.deepEqual(result.uniqueEmails, ["a@a.com","email@mail.ru"]);
+        assert.true(
+            ["a@a.com","email@mail.ru"].includes(result.mostFrequentEmail)
+        );
     });
 
     QUnit.test("Дополнительный тест 2. Правильно находит самый часто повторяющийся email", function(assert) {
@@ -52,9 +52,31 @@ QUnit.module("Тестируем функцию emailAnalyzer", function() {
 
         assert.deepEqual(result, {
             emailCount: 3,
-            uniqueEmails: ["user@example.com", "user@domain.com"],
+            uniqueEmails: ["user@domain.com", "user@example.com"],
             mostFrequentEmail: "user@example.com"
         });
+    });
+    // Добавлен тест на нестроковый тип данных на входе
+    QUnit.test("Дополнительный тест 3. Работает правильно с нестроковым значениями на входе", function(assert) {
+        const input = [true, 3, "user@example.com"];
+        const result = emailAnalyzer(input);
+
+        assert.deepEqual(result, {
+            emailCount: 0,
+            uniqueEmails: [],
+            mostFrequentEmail: ""
+        });
+    });
+    // Добавлен тест на алфавитный порядок вывода уникальных почт
+    QUnit.test("Дополнительный тест 4. Правильно выводит неповторяющиеся почты в алфавитном порядке", function(assert) {
+        const input = "Вам поступали письма от: b@example.com, c@example.com, s@domain.com, s@momain.com, aa@mail.ru.";
+        const result = emailAnalyzer(input);
+
+        assert.deepEqual(result.emailCount, 5);
+        assert.deepEqual(result.uniqueEmails,['aa@mail.ru','b@example.com','c@example.com','s@domain.com','s@momain.com']);
+        assert.true(
+            ['aa@mail.ru','b@example.com','c@example.com','s@domain.com','s@momain.com'].includes(result.mostFrequentEmail)
+        );
     });
 });
 
