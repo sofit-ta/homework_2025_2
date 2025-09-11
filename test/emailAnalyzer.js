@@ -78,6 +78,17 @@ QUnit.module("Тестируем функцию emailAnalyzer", function() {
             ['aa@mail.ru','b@example.com','c@example.com','s@domain.com','s@momain.com'].includes(result.mostFrequentEmail)
         );
     });
+    // Добавлен тест на проверку объекта String
+    QUnit.test("Дополнительный тест 5. Правильно обрабатывает объект String", function(assert) {
+        const input = new String("Ваша почта: aa@mail.ru.");
+        const result = emailAnalyzer(input);
+
+        assert.deepEqual(result, {
+            emailCount: 1,
+            uniqueEmails: ['aa@mail.ru'],
+            mostFrequentEmail: "aa@mail.ru"
+        });
+    });
 });
 
 

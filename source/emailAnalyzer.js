@@ -13,7 +13,7 @@
  * @returns {string} result.mostFrequentEmail - электронный адрес, который встречается чаще всего
  */
 const emailAnalyzer = (text) => {
-    if (typeof text !== 'string') {
+    if (typeof text !== 'string' && !(text instanceof String)) {
         return { emailCount: 0, uniqueEmails: [], mostFrequentEmail: "" };
     }
 
@@ -31,16 +31,18 @@ const emailAnalyzer = (text) => {
     for (const email of emails) {
         emailsEntryAmount.set(email, 1 + (emailsEntryAmount.get(email) || 0));
     }
-
-    const uniqueEmails = Array.from(emailsEntryAmount.keys()).sort()
+    
+    const uniqueEmails = [];
     let mostFrequentEmail;
     let maxCount = 0;
-    for (const email of emailsEntryAmount.keys()) {
-        if (emailsEntryAmount.get(email) > maxCount) {
-            maxCount = emailsEntryAmount.get(email);
+    emailsEntryAmount.forEach((amount, email) => {
+        uniqueEmails.push(email);
+        if (amount > maxCount) {
+            maxCount = amount;
             mostFrequentEmail = email;
         }
-    }
+    });
+    uniqueEmails.sort();
 
     return { emailCount, uniqueEmails, mostFrequentEmail};
 };
